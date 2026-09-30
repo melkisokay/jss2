@@ -22,7 +22,7 @@
   </head>
   <body>
     <div id="mydiv">
-      <div id= "mydivheader">
+      <div id="mydivheader"> div header </div>
       <p>
         move
       </p>
@@ -32,16 +32,44 @@
       <p>
         <b>div</b>
       </p>
-         </div>
     </div>
     
     <script>
     //make draggable
       dragElement(document.getElementById("mydiv"));
-      function dragElement (elmt) {
+      function dragElement (elmnt) {
         let pos1=0, pos2= 0, pos3 = 0, pos4 = 0;
-        if(document.getElementById(elmt.id + "header")){
-          document.getElementById(elmt.id + "header").
+        if(document.getElementById(elmnt.id + "header")){
+          document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+        }
+        else{
+          elmt.onmousedown = dragMouseDown;
+        }
+        function dragMouseDown (e) {
+          e = e ||window.event;
+          e.preventDefault();
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.onmouseup = closeDragElement;
+          //call a function whenever cursor moves
+          document.onmousemove = elementDrag;
+        }
+        function elementDrag (e){
+          e = e ||window.event;
+          e.preventDefault();
+          //calc new cursor position
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          //set elements new position
+          elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+          elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+        function closeDragElement () {
+          //stop moving when mouse is released
+          document.onmouseup = null;
+          document.onmousemove = null;
         }
       }
 
